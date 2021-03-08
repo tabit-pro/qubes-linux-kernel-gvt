@@ -122,6 +122,11 @@ CONFIG_USB_DUMMY_HCD=m
 
 CONFIG_SECURITY_APPARMOR=y
 
+################################################################################
+## Enable memory hotplug of Xen balloon driver. This is useful to map a lot of
+## grant tables, without using otherwise usable physical address space
+
+CONFIG_XEN_BALLOON_MEMORY_HOTPLUG=y
 
 ################################################################################
 ## TODO: from diff to old config
