@@ -129,6 +129,11 @@ CONFIG_SECURITY_APPARMOR=y
 CONFIG_XEN_BALLOON_MEMORY_HOTPLUG=y
 
 ################################################################################
+## Allow grant tables to be turned into dma-bufs and back. Needed by GUI daemon.
+CONFIG_XEN_GRANT_DMA_ALLOC=y
+CONFIG_XEN_GNTDEV_DMABUF=y
+
+################################################################################
 ## TODO: from diff to old config
 
 ## CONFIG_X86_AMD_PLATFORM_DEVICE=y
