@@ -4,6 +4,7 @@
 
 %define variant qubes
 %define plainrel @REL@%{?dist}
+%define name_suffix -gvt
 %define rel %{plainrel}.%{variant}
 %define version %(echo '@VERSION@' | sed 's/~rc.*/.0/')
 %define upstream_version %(echo '@VERSION@' | sed 's/~rc/-rc/')
@@ -124,6 +125,64 @@ Patch5: 0006-block-add-no_part_scan-module-parameter.patch
 Patch12: 0013-xen-pcifront-pciback-Update-pciif.h-with-err-and-res.patch
 Patch13: 0014-xen-pciback-add-attribute-to-allow-MSI-enable-flag-w.patch
 Patch14: 0001-Revert-xen-netback-Check-for-hotplug-status-existenc.patch
+
+# Intel gvt-g for xen (xengt)
+Patch1001: 0001-drm-i915-gvt-fix-high-order-allocation-failure-on-la.patch
+Patch1002: 0002-arch-x86-xen-add-infrastruction-in-xen-to-support-gv.patch
+Patch1003: 0003-drm-i915-gvt-write-guest-ppgtt-entry-for-xengt-suppo.patch
+Patch1004: 0004-drm-i915-xengt-xengt-moudule-initial-files.patch
+Patch1005: 0005-drm-i915-xengt-check-on_destroy-on-pfn_to_mfn.patch
+Patch1006: 0006-arch-x86-xen-Import-x4.9-interface-for-ioreq.patch
+Patch1007: 0007-i915-gvt-xengt.c-Use-new-dm_op-instead-of-hvm_op.patch
+Patch1008: 0008-i915-gvt-xengt.c-New-interface-to-write-protect-PPGT.patch
+Patch1009: 0009-i915-gvt-xengt.c-Select-vgpu-type-according-to-low_g.patch
+Patch1010: 0010-drm-i915-gvt-Don-t-output-error-message-when-DomU-ma.patch
+Patch1011: 0011-drm-i915-gvt-xengt-Correctly-get-low-mem-max-gfn.patch
+Patch1012: 0012-drm-i915-gvt-Fix-dom0-call-trace-at-shutdown-or-rebo.patch
+Patch1013: 0013-hvm-dm_op.h-Sync-dm_op-interface-to-xen-4.9-release.patch
+Patch1014: 0014-drm-i915-gvt-Apply-g2h-adjust-for-GTT-mmio-access.patch
+Patch1015: 0015-drm-i915-gvt-Apply-g2h-adjustment-during-fence-mmio-.patch
+Patch1016: 0016-drm-i915-gvt-Patch-the-gma-in-gpu-commands-during-co.patch
+Patch1017: 0017-drm-i915-gvt-Retrieve-the-guest-gm-base-address-from.patch
+Patch1018: 0018-drm-i915-gvt-Align-the-guest-gm-aperture-start-offse.patch
+Patch1019: 0019-drm-i915-gvt-Add-support-to-new-VFIO-subregion-VFIO_.patch
+Patch1020: 0020-drm-i915-gvt-Implement-vGPU-status-save-and-restore-.patch
+Patch1021: 0021-vfio-Implement-new-Ioctl-VFIO_IOMMU_GET_DIRTY_BITMAP.patch
+Patch1022: 0022-drm-i915-gvt-Add-dev-node-for-vGPU-state-save-restor.patch
+Patch1023: 0023-drm-i915-gvt-Add-interface-to-control-the-vGPU-runni.patch
+Patch1024: 0024-drm-i915-gvt-Modify-the-vGPU-save-restore-logic-for-.patch
+Patch1025: 0025-drm-i915-gvt-Add-log-dirty-support-for-XENGT-migrati.patch
+Patch1026: 0026-drm-i915-gvt-xengt-Add-iosrv_enabled-to-track-iosrv-.patch
+Patch1027: 0027-drm-i915-gvt-Add-xengt-ppgtt-write-handler.patch
+Patch1028: 0028-drm-i915-gvt-xengt-Impliment-mpt-dma_map-unmap_guest.patch
+Patch1029: 0029-drm-i915-gvt-introduce-a-new-VFIO-region-for-vfio-de.patch
+Patch1030: 0030-drm-i915-gvt-change-the-return-value-of-opregion-acc.patch
+Patch1031: 0031-drm-i915-gvt-Rebase-the-code-to-gvt-staging-for-live.patch
+Patch1032: 0032-drm-i915-gvt-Apply-g2h-adjustment-to-buffer-start-gm.patch
+Patch1033: 0033-drm-i915-gvt-Fix-xengt-opregion-handling-in-migratio.patch
+Patch1034: 0034-drm-i915-gvt-XenGT-migration-optimize.patch
+Patch1035: 0035-drm-i915-gvt-Add-vgpu-execlist-info-into-migration-d.patch
+Patch1036: 0036-drm-i915-gvt-Emulate-ring-mode-register-restore-for-.patch
+Patch1037: 0037-drm-i915-gvt-Use-copy_to_user-to-return-opregion.patch
+Patch1038: 0038-drm-i915-gvt-Expose-opregion-in-vgpu-open.patch
+Patch1039: 0039-drm-i915-gvt-xengt-Don-t-shutdown-vm-at-ioreq-failur.patch
+Patch1040: 0040-drm-i915-gvt-Emulate-hw-status-page-address-register.patch
+Patch1041: 0041-drm-i915-gvt-migration-copy-vregs-on-vreg-load.patch
+Patch1042: 0042-drm-i915-gvt-Fix-a-command-corruption-caused-by-live.patch
+Patch1043: 0043-drm-i915-gvt-xengt-Fix-xengt-instance-destroy-error.patch
+Patch1044: 0044-drm-i915-gvt-invalidate-old-ggtt-page-when-update-gg.patch
+Patch1045: 0045-drm-i915-gvt-Add-some-regs-to-force-to-nonpriv-white.patch
+Patch1046: 0046-xengt-fix-XENMEM_get_mfn_from_pfn-hypercall-number.patch
+Patch1047: 0047-xengt-enforce-primary-class-id.patch
+Patch1048: 0048-xengt-use-xs-vgpu-type.patch
+Patch1049: 0049-xengt-fix-shutdown-failures.patch
+Patch1050: 0050-xengt-gtt-2m-alignment.patch
+Patch1051: 0051-xengt-get-domctl-interface-version.patch
+Patch1052: 0052-xengt-clean-unused-sreg.patch
+Patch1053: 0053-xengt-fix-v5.4-build-errors.patch
+Patch1054: 0054-xengt-fix-vtd-active-check-condition-with-xenpv.patch
+Patch1055: 0055-xengt-fix-module-init.patch
+Patch1056: 0056-xengt-remove-edid-and-virtual-display-init.patch
 
 %description
 Qubes Dom0 kernel.

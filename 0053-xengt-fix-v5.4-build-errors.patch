@@ -1,0 +1,43 @@
+From 9eb55768cf540b855be9b9cffa94e812c4fb7551 Mon Sep 17 00:00:00 2001
+From: Ivan Kardykov <kardykov@tabit.pro>
+Date: Thu, 27 Jan 2022 07:34:34 +0300
+Subject: [PATCH 53/56] xengt: fix v5.4 build errors
+
+This fixes:
+
+drivers/gpu/drm/i915/gvt/xengt.c:1852:15: error: initialization of 'void (*)(struct device *)' from incompatible pointer type 'void (*)(struct device *, void *)' [-Werror=incompatible-pointer-types]
+DEBUG:  1852 |  .host_exit = xengt_host_exit,
+DEBUG:       |               ^~~~~~~~~~~~~~~
+
+drivers/gpu/drm/i915/gvt/xengt.c:1854:17: error: initialization of 'void (*)(void *)' from incompatible pointer type 'void (*)(long unsigned int)' [-Werror=incompatible-pointer-types]
+DEBUG:  1854 |  .detach_vgpu = xengt_detach_vgpu,
+DEBUG:       |                 ^~~~~~~~~~~~~~~~~
+---
+ drivers/gpu/drm/i915/gvt/xengt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gvt/xengt.c b/drivers/gpu/drm/i915/gvt/xengt.c
+index 9eca60a225b9..47506e21091b 100644
+--- a/drivers/gpu/drm/i915/gvt/xengt.c
++++ b/drivers/gpu/drm/i915/gvt/xengt.c
+@@ -1674,7 +1674,7 @@ static int xengt_host_init(struct device *dev, void *gvt, const void *ops)
+ 	return ret;
+ }
+ 
+-static void xengt_host_exit(struct device *dev, void *gvt)
++static void xengt_host_exit(struct device *dev)
+ {
+ 	xengt_sysfs_del();
+ 	xengt_priv.gvt = NULL;
+@@ -1687,7 +1687,7 @@ static int xengt_attach_vgpu(void *vgpu, unsigned long *handle)
+ 	return 0;
+ }
+ 
+-static void xengt_detach_vgpu(unsigned long handle)
++static void xengt_detach_vgpu(void *vgpu)
+ {
+ 	/* nothing to do here */
+ }
+-- 
+2.34.1
+

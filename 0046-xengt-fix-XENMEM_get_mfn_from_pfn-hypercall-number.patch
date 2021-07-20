@@ -1,0 +1,26 @@
+From 79120ed241df3b5597a1dba19f90e56f85cfa274 Mon Sep 17 00:00:00 2001
+From: Ivan Kardykov <kardykov@tabit.pro>
+Date: Wed, 26 Jan 2022 23:09:56 +0300
+Subject: [PATCH 46/56] xengt:fix XENMEM_get_mfn_from_pfn hypercall number
+
+Apply to Xen 4.12+
+---
+ include/xen/interface/memory.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/xen/interface/memory.h b/include/xen/interface/memory.h
+index 00d4fbda906b..9b8739998ce4 100644
+--- a/include/xen/interface/memory.h
++++ b/include/xen/interface/memory.h
+@@ -246,7 +246,7 @@ DEFINE_GUEST_HANDLE_STRUCT(xen_memory_map);
+ /*
+  * Translate the given guest PFNs to MFNs
+  */
+-#define XENMEM_get_mfn_from_pfn    25
++#define XENMEM_get_mfn_from_pfn    29
+ struct xen_get_mfn_from_pfn {
+     /*
+      * Pointer to buffer to fill with list of pfn.
+-- 
+2.34.1
+

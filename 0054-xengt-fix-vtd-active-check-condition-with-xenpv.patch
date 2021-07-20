@@ -1,0 +1,31 @@
+From d7e7424697532cf766578d25dbcccd3ec76d810a Mon Sep 17 00:00:00 2001
+From: Ivan Kardykov <kardykov@tabit.pro>
+Date: Tue, 1 Feb 2022 10:48:19 +0300
+Subject: [PATCH 54/56] xengt: fix vtd-active check condition with xenpv
+
+Do not force iommu as active with XEN PV (dom0) environment because it
+might be disabled with xen parameter iommu=no-igfx.
+
+This fixes suspend/resume issues with VMs using xengt caused by upstream
+commit drm/i915: Force VT'd workarounds when running as a guest OS
+---
+ drivers/gpu/drm/i915/i915_drv.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
+index 00335a1c02b0..4dc9c75ca98f 100644
+--- a/drivers/gpu/drm/i915/i915_drv.h
++++ b/drivers/gpu/drm/i915/i915_drv.h
+@@ -2201,7 +2201,8 @@ static inline bool intel_vtd_active(void)
+ #endif
+ 
+ 	/* Running as a guest, we assume the host is enforcing VT'd */
+-	return !hypervisor_is_type(X86_HYPER_NATIVE);
++	return !(hypervisor_is_type(X86_HYPER_NATIVE) || 
++		    hypervisor_is_type(X86_HYPER_XEN_PV));
+ }
+ 
+ static inline bool intel_scanout_needs_vtd_wa(struct drm_i915_private *dev_priv)
+-- 
+2.34.1
+

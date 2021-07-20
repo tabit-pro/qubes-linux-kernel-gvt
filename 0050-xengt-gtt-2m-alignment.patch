@@ -1,0 +1,53 @@
+From 40587d55c8a9aa4cb1c534b2e9b2da5874fbc6da Mon Sep 17 00:00:00 2001
+From: Ivan Kardykov <kardykov@tabit.pro>
+Date: Wed, 26 Jan 2022 23:51:14 +0300
+Subject: [PATCH 50/56] xengt: gtt 2m alignment
+
+Based on XCP-NG kernel patchset
+
+https://github.com/xcp-ng-rpms/kernel
+---
+ drivers/gpu/drm/i915/gvt/aperture_gm.c | 2 +-
+ drivers/gpu/drm/i915/gvt/xengt.c       | 6 +++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gvt/aperture_gm.c b/drivers/gpu/drm/i915/gvt/aperture_gm.c
+index 20c59c28ea0e..974ce2208d13 100644
+--- a/drivers/gpu/drm/i915/gvt/aperture_gm.c
++++ b/drivers/gpu/drm/i915/gvt/aperture_gm.c
+@@ -64,7 +64,7 @@ static int alloc_gm(struct intel_vgpu *vgpu, bool high_gm)
+ 	mutex_lock(&dev_priv->drm.struct_mutex);
+ 	mmio_hw_access_pre(dev_priv);
+ 	ret = i915_gem_gtt_insert(&dev_priv->ggtt.vm, node,
+-				  size, I915_GTT_PAGE_SIZE,
++				  size, I915_GTT_PAGE_SIZE_2M,
+ 				  I915_COLOR_UNEVICTABLE,
+ 				  start, end, flags);
+ 	mmio_hw_access_post(dev_priv);
+diff --git a/drivers/gpu/drm/i915/gvt/xengt.c b/drivers/gpu/drm/i915/gvt/xengt.c
+index 1e85ced0d5ff..0732730ff932 100644
+--- a/drivers/gpu/drm/i915/gvt/xengt.c
++++ b/drivers/gpu/drm/i915/gvt/xengt.c
+@@ -548,7 +548,7 @@ static int xen_hvm_memory_mapping(domid_t vm_id, uint64_t first_gfn,
+ {
+ 	struct xen_domctl arg;
+ 	int rc = 0, err = 0;
+-	unsigned long done = 0, mapping_sz = 64;
++	unsigned long done = 0, mapping_sz = nr_mfns;
+ 
+ 	if (add_mapping) {
+ 		rc = xen_domain_iomem_perm(vm_id, first_mfn, nr_mfns, 1);
+@@ -575,6 +575,10 @@ static int xen_hvm_memory_mapping(domid_t vm_id, uint64_t first_gfn,
+ 				mapping_sz /= 2;
+ 				goto retry;
+ 			}
++			if (err > 0) {
++				done += err;
++				continue;
++			}
+ 			//Save first error status.
+ 			if (!rc)
+ 				rc = err;
+-- 
+2.34.1
+

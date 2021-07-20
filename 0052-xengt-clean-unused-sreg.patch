@@ -1,0 +1,97 @@
+From 2e8f72199d45256d994f77f3ce4c90e942f40bb6 Mon Sep 17 00:00:00 2001
+From: Ivan Kardykov <kardykov@tabit.pro>
+Date: Thu, 27 Jan 2022 06:04:48 +0300
+Subject: [PATCH 52/56] xengt: clean unused sreg
+
+Apply to v5.4+
+
+Follow commit 9c1c8416fc3759d52e6e173d4059149d5d2c6c00
+Author: Yan Zhao <yan.y.zhao@intel.com>
+Date:   Sun Mar 10 21:40:45 2019 -0400
+---
+ drivers/gpu/drm/i915/gvt/migrate.c | 48 ------------------------------
+ 1 file changed, 48 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gvt/migrate.c b/drivers/gpu/drm/i915/gvt/migrate.c
+index 786e9aa6cb2d..b9186ef87f6e 100644
+--- a/drivers/gpu/drm/i915/gvt/migrate.c
++++ b/drivers/gpu/drm/i915/gvt/migrate.c
+@@ -65,8 +65,6 @@ static int image_header_load(const struct gvt_migration_obj_t *obj, u32 size);
+ static int image_header_save(const struct gvt_migration_obj_t *obj);
+ static int vreg_load(const struct gvt_migration_obj_t *obj, u32 size);
+ static int vreg_save(const struct gvt_migration_obj_t *obj);
+-static int sreg_load(const struct gvt_migration_obj_t *obj, u32 size);
+-static int sreg_save(const struct gvt_migration_obj_t *obj);
+ static int vcfg_space_load(const struct gvt_migration_obj_t *obj, u32 size);
+ static int vcfg_space_save(const struct gvt_migration_obj_t *obj);
+ static int vggtt_load(const struct gvt_migration_obj_t *obj, u32 size);
+@@ -90,13 +88,6 @@ struct gvt_migration_operation_t vReg_ops = {
+ 	.post_load = NULL,
+ };
+ 
+-struct gvt_migration_operation_t sReg_ops = {
+-	.pre_copy = NULL,
+-	.pre_save = sreg_save,
+-	.pre_load = sreg_load,
+-	.post_load = NULL,
+-};
+-
+ struct gvt_migration_operation_t vcfg_space_ops = {
+ 	.pre_copy = NULL,
+ 	.pre_save = vcfg_space_save,
+@@ -182,9 +173,6 @@ static struct gvt_migration_obj_t gvt_device_objs[] = {
+ 			GVT_MIGRATION_CFG_SPACE,
+ 			PCI_CFG_SPACE_EXP_SIZE,
+ 			vcfg_space_ops),
+-	MIGRATION_UNIT(struct intel_vgpu,
+-			GVT_MIGRATION_SREG,
+-			GVT_MMIO_SIZE, sReg_ops),
+ 	MIGRATION_UNIT(struct intel_vgpu,
+ 			GVT_MIGRATION_VREG,
+ 			GVT_MMIO_SIZE, vReg_ops),
+@@ -349,42 +337,6 @@ static int vcfg_space_load(const struct gvt_migration_obj_t *obj, u32 size)
+ 	return n_transfer;
+ }
+ 
+-static int sreg_save(const struct gvt_migration_obj_t *obj)
+-{
+-	struct intel_vgpu *vgpu = (struct intel_vgpu *) obj->vgpu;
+-	int n_transfer = INV;
+-	void *src = vgpu->mmio.sreg;
+-	void *des = obj->img + obj->offset;
+-
+-	memcpy(des, &obj->region, sizeof(struct gvt_region_t));
+-
+-	des += sizeof(struct gvt_region_t);
+-	n_transfer = obj->region.size;
+-
+-	memcpy(des, src, n_transfer);
+-	return sizeof(struct gvt_region_t) + n_transfer;
+-}
+-
+-static int sreg_load(const struct gvt_migration_obj_t *obj, u32 size)
+-{
+-	struct intel_vgpu *vgpu = (struct intel_vgpu *) obj->vgpu;
+-	void *dest = vgpu->mmio.sreg;
+-	int n_transfer = INV;
+-
+-	if (unlikely(size != obj->region.size)) {
+-		gvt_err("migration obj size isn't match between target and image!"
+-		" memsize=%d imgsize=%d\n",
+-		obj->region.size,
+-		size);
+-		return n_transfer;
+-	} else {
+-		n_transfer = obj->region.size;
+-		memcpy(dest, obj->img + obj->offset, n_transfer);
+-	}
+-
+-	return n_transfer;
+-}
+-
+ static int opregion_save(const struct gvt_migration_obj_t *obj)
+ {
+ 	struct intel_vgpu *vgpu = (struct intel_vgpu *) obj->vgpu;
+-- 
+2.34.1
+

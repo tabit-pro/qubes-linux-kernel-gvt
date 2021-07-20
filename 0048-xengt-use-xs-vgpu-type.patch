@@ -1,0 +1,52 @@
+From c82b0f418b7b5a51943cbd3e935cbafc14d0084a Mon Sep 17 00:00:00 2001
+From: Ivan Kardykov <kardykov@tabit.pro>
+Date: Wed, 26 Jan 2022 23:14:23 +0300
+Subject: [PATCH 48/56] xengt: use xs vgpu type
+
+Update VGPU type to match the one used by previous versions of XenServer
+
+Based on XCP-NG kernel patchset
+
+https://github.com/xcp-ng-rpms/kernel
+---
+ drivers/gpu/drm/i915/gvt/display.h | 3 +++
+ drivers/gpu/drm/i915/gvt/vgpu.c    | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/gvt/display.h b/drivers/gpu/drm/i915/gvt/display.h
+index a87f33e6a23c..1d2dfc33f2ba 100644
+--- a/drivers/gpu/drm/i915/gvt/display.h
++++ b/drivers/gpu/drm/i915/gvt/display.h
+@@ -148,6 +148,7 @@ enum intel_vgpu_port_type {
+ 
+ enum intel_vgpu_edid {
+ 	GVT_EDID_1024_768,
++	GVT_EDID_1920_1080,
+ 	GVT_EDID_1920_1200,
+ 	GVT_EDID_NUM,
+ };
+@@ -166,6 +167,8 @@ static inline char *vgpu_edid_str(enum intel_vgpu_edid id)
+ 	switch (id) {
+ 	case GVT_EDID_1024_768:
+ 		return "1024x768";
++	case GVT_EDID_1920_1080:
++		return "1920x1080";
+ 	case GVT_EDID_1920_1200:
+ 		return "1920x1200";
+ 	default:
+diff --git a/drivers/gpu/drm/i915/gvt/vgpu.c b/drivers/gpu/drm/i915/gvt/vgpu.c
+index c4442cdc0148..33cb944fc853 100644
+--- a/drivers/gpu/drm/i915/gvt/vgpu.c
++++ b/drivers/gpu/drm/i915/gvt/vgpu.c
+@@ -90,7 +90,7 @@ static struct {
+ } vgpu_types[] = {
+ /* Fixed vGPU type table */
+ 	{ MB_TO_BYTES(64), MB_TO_BYTES(384), 4, VGPU_WEIGHT(8), GVT_EDID_1024_768, "8" },
+-	{ MB_TO_BYTES(128), MB_TO_BYTES(512), 4, VGPU_WEIGHT(4), GVT_EDID_1920_1200, "4" },
++	{ MB_TO_BYTES(128), MB_TO_BYTES(384), 4, VGPU_WEIGHT(8), GVT_EDID_1920_1080, "8" },
+ 	{ MB_TO_BYTES(256), MB_TO_BYTES(1024), 4, VGPU_WEIGHT(2), GVT_EDID_1920_1200, "2" },
+ 	{ MB_TO_BYTES(512), MB_TO_BYTES(2048), 4, VGPU_WEIGHT(1), GVT_EDID_1920_1200, "1" },
+ };
+-- 
+2.34.1
+

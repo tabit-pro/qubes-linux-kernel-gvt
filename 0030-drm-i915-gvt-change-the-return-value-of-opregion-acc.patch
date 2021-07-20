@@ -1,0 +1,39 @@
+From cb73082591ffa8a5b65754f78d5348eca8bee80e Mon Sep 17 00:00:00 2001
+From: Yulei Zhang <yulei.zhang@intel.com>
+Date: Fri, 11 May 2018 15:09:31 +0800
+Subject: [PATCH 30/56] drm/i915/gvt: change the return value of opregion
+ access function
+
+Change the return value of accessing igd opregion in kvmgt to get
+aligned with accessing to migration region to avoid conflict.
+
+Signed-off-by: Yulei Zhang <yulei.zhang@intel.com>
+---
+ drivers/gpu/drm/i915/gvt/kvmgt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
+index bd3122c26147..9d5ef050440e 100644
+--- a/drivers/gpu/drm/i915/gvt/kvmgt.c
++++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
+@@ -498,7 +498,7 @@ static size_t intel_vgpu_reg_rw_opregion(struct intel_vgpu *vgpu, char *buf,
+ 	count = min(count, (size_t)(vgpu->vdev.region[i].size - pos));
+ 	memcpy(buf, base + pos, count);
+ 
+-	return count;
++	return 0;
+ }
+ 
+ static void intel_vgpu_reg_release_opregion(struct intel_vgpu *vgpu,
+@@ -1080,7 +1080,7 @@ static ssize_t intel_vgpu_rw(struct mdev_device *mdev, char *buf,
+ 			return -EINVAL;
+ 
+ 		index -= VFIO_PCI_NUM_REGIONS;
+-		return vgpu->vdev.region[index].ops->rw(vgpu, buf, count,
++		ret = vgpu->vdev.region[index].ops->rw(vgpu, buf, count,
+ 				ppos, is_write);
+ 	}
+ 
+-- 
+2.34.1
+
