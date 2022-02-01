@@ -127,6 +127,10 @@ Patch13: 0014-xen-pciback-add-attribute-to-allow-MSI-enable-flag-w.patch
 Patch14: 0001-Revert-xen-netback-Check-for-hotplug-status-existenc.patch
 Patch15: 0001-usbip-tweak-clear-halt-with-simple-reset.patch
 
+
+# additional tweaks
+Patch100: usbip-backport-fix-calling-usb-hcd-giveback-urb-with-irqs.patch
+
 # Intel gvt-g for xen (xengt)
 Patch1001: 0001-drm-i915-gvt-fix-high-order-allocation-failure-on-la.patch
 Patch1002: 0002-arch-x86-xen-add-infrastruction-in-xen-to-support-gv.patch
