@@ -125,11 +125,18 @@ Patch5: 0006-block-add-no_part_scan-module-parameter.patch
 Patch12: 0013-xen-pcifront-pciback-Update-pciif.h-with-err-and-res.patch
 Patch13: 0014-xen-pciback-add-attribute-to-allow-MSI-enable-flag-w.patch
 Patch14: 0001-Revert-xen-netback-Check-for-hotplug-status-existenc.patch
-Patch15: 0001-usbip-tweak-clear-halt-with-simple-reset.patch
 
-
-# additional tweaks
-Patch100: usbip-backport-fix-calling-usb-hcd-giveback-urb-with-irqs.patch
+Patch100: xsa396-linux-01.patch
+Patch101: xsa396-linux-02.patch
+Patch102: xsa396-linux-03.patch
+Patch103: xsa396-linux-04.patch
+Patch104: xsa396-linux-05.patch
+Patch105: xsa396-linux-06.patch
+Patch106: xsa396-linux-07.patch
+Patch107: xsa396-linux-09.patch
+Patch108: xsa396-linux-10.patch
+Patch109: xsa396-linux-11.patch
+Patch110: xsa396-linux-12.patch
 
 # Intel gvt-g for xen (xengt)
 Patch1001: 0001-drm-i915-gvt-fix-high-order-allocation-failure-on-la.patch
@@ -189,18 +196,9 @@ Patch1054: 0054-xengt-fix-vtd-active-check-condition-with-xenpv.patch
 Patch1055: 0055-xengt-fix-module-init.patch
 Patch1056: 0056-xengt-remove-edid-and-virtual-display-init.patch
 
-Patch100: xsa396-linux-01.patch
-Patch101: xsa396-linux-02.patch
-Patch102: xsa396-linux-03.patch
-Patch103: xsa396-linux-04.patch
-Patch104: xsa396-linux-05.patch
-Patch105: xsa396-linux-06.patch
-Patch106: xsa396-linux-07.patch
-Patch107: xsa396-linux-09.patch
-Patch108: xsa396-linux-10.patch
-Patch109: xsa396-linux-11.patch
-Patch110: xsa396-linux-12.patch
-
+# additional tweaks
+Patch1100: usbip-backport-fix-calling-usb-hcd-giveback-urb-with-irqs.patch
+Patch1101: 0001-usbip-tweak-clear-halt-with-simple-reset.patch
 
 %description
 Qubes Dom0 kernel.
